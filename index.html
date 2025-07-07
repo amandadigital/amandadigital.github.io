@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amanda - Find yours</title>
-    <meta name="description" content="Cool search">
-    <link rel="shortcut icon" href="a.png">
-    <link rel="icon" id="favicon" href="https://maxkranz.me/a_black.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amanda - Find yours</title>
+  <meta name="description" content="Cool search">
 
+  <!-- Заглушка на случай, если JS не сработает -->
+  <link rel="icon" id="favicon" href="https://maxkranz.me/a_black.png" />
+</head>
     <style>
         html, body {
             margin: 0;
@@ -25,37 +26,7 @@
 <body>
     <iframe src="https://startling-custard-e530ac.netlify.app/"></iframe>
       <script>
-    const input = document.getElementById('search');
-    const iframe = document.getElementById('search-frame');
-
-    // Получаем параметр q из адресной строки
-    function getQueryParam() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('q') || '';
-    }
-
-    // Обновляем iframe
-    function updateIframe(query) {
-      iframe.src = https://startling-custard-e530ac.netlify.app/?q=${encodeURIComponent(query)};
-    }
-
-    // При нажатии на кнопку
-    function search() {
-      const query = input.value.trim();
-      const newUrl = ${window.location.pathname}?q=${encodeURIComponent(query)};
-      history.pushState(null, '', newUrl); // Меняем URL без перезагрузки
-      updateIframe(query);
-    }
-
-    // При загрузке страницы
-    window.addEventListener('DOMContentLoaded', () => {
-      const initialQuery = getQueryParam();
-      if (initialQuery) {
-        input.value = initialQuery;
-        updateIframe(initialQuery);
-      }
-    });
-           const darkIcon = "https://maxkranz.me/a_white.png";
+    const darkIcon = "https://maxkranz.me/a_white.png";
     const lightIcon = "https://maxkranz.me/a_black.png";
 
     function updateFavicon() {
