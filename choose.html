@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Choose Your AMND</title>
+  <title>Выбери свое путешествие</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     body {
@@ -17,12 +17,30 @@
       color: white;
       flex-direction: column;
       gap: 20px;
+      overflow: hidden;
     }
+
+    .quest-text {
+      font-weight: 400;
+      font-size: 1.2rem;
+      margin-bottom: 0px;
+      color: deepskyblue;
+      opacity: 0;
+      transform: translateY(-30px);
+      animation: fadeInDown 1s forwards;
+      animation-delay: 0.2s;
+    }
+
     h1 {
       font-weight: 600;
-      margin-bottom: 40px;
       font-size: 2rem;
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(-20px);
+      animation: fadeInUp 1s forwards;
+      animation-delay: 0.5s;
     }
+
     .button {
       padding: 15px 30px;
       font-size: 1rem;
@@ -31,16 +49,45 @@
       color: #0f0f0f;
       background-color: deepskyblue;
       border-radius: 12px;
-      transition: background 0.3s;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s forwards;
     }
+
+    .button:nth-child(3) { /* первая кнопка после h1 и quest-text */
+      animation-delay: 1s;
+    }
+
+    .button:nth-child(4) { /* вторая кнопка */
+      animation-delay: 1.3s;
+    }
+
     .button:hover {
       background-color: #00bfff;
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0, 191, 255, 0.4);
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInDown {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Добро пожаловать в Amanda!</h1>
-  <a href="https://amnd.live" class="button">В поисковик</a>
-  <a href="https://t.me/amandasearchbot" class="button">В бот</a>
+  <div class="quest-text">Выбери свое приключение 🧭</div>
+  <h1>Отправься...</h1>
+  <a href="https://amnd.live" class="button">В поисковик🔍</a>
+  <a href="https://t.me/amandasearchbot" class="button">В бота🤖</a>
 </body>
 </html>
