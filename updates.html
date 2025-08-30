@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Обновления Amanda</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: "Montserrat", sans-serif;
+      background: #fdfaf7;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 30px;
+      border-bottom: 1px solid #eee;
+    }
+    header img {
+      height: 40px;
+    }
+    main {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    h1 {
+      color: #ff6600;
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 600;
+    }
+    .update {
+      border: 1px solid #ffd9b3;
+      border-radius: 12px;
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      background: #fff8f0;
+      cursor: pointer;
+      transition: background 0.2s;
+      position: relative;
+    }
+    .update:hover {
+      background: #ffe6cc;
+    }
+    .update-title {
+      font-weight: 600;
+      color: #ff6600;
+      margin: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .update-date {
+      font-size: 12px;
+      color: #999;
+      margin: 3px 0 0 0;
+    }
+    .update-description {
+      margin-top: 10px;
+      max-height: 0;
+      overflow: hidden;
+      font-size: 14px;
+      color: #555;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+    .update-description.show {
+      opacity: 1;
+      max-height: 500px;
+    }
+    .arrow {
+      display: inline-block;
+      margin-left: 10px;
+      transition: transform 0.3s ease;
+    }
+    .arrow.rotate {
+      transform: rotate(90deg);
+    }
+    .update-link {
+      display: block;
+      margin-top: 8px;
+      font-size: 13px;
+      color: #ff6600;
+      text-decoration: none;
+    }
+    .update-link:hover {
+      text-decoration: underline;
+    }
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      font-size: 14px;
+      color: #999;
+    }
+    footer a {
+      color: #ff6600;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://amandawwww.github.io/a_orange.png" alt="Amanda Logo">
+    <a href="https://amnd.live" style="color:#ff6600; text-decoration:none;">amnd.live</a>
+  </header>
+  <main>
+    <h1>Обновления на 1 сентября</h1>
+
+    <div class="update" onclick="toggleDescription(this)">
+      <p class="update-title">
+        Добавлена игра "Собери рюкзак"
+        <span class="arrow">&#9654;</span>
+      </p>
+      <p class="update-date">1 сентября 2025</p>
+      <p class="update-description">Подготовься к школе и собери рюкзак на 1 сентября!</p>
+      <a href="https://amnd.live/game" class="update-link">Просмотреть обновление</a>
+    </div>
+
+    <div class="update" onclick="toggleDes      <a href="#" class="update-link">Просмотреть обновление</a>
+cription(this)">
+      <p class="update-title">
+        Обновлен дизайн
+        <span class="arrow">&#9654;</span>
+      </p>
+      <p class="update-date">1 сентября 2025</p>
+      <p class="update-description">Цвет логотипа теперь оранжевый, а вместо текста "Найди свое" в поле ввода "Снова в школу"</p>
+      <a href="https://amnd.live/" class="update-link">Просмотреть обновление</a>
+    </div>
+
+    <div class="update" onclick="toggleDescription(this)">
+      <p class="update-title">
+        Запуск на Product Radar
+        <span class="arrow">&#9654;</span>
+      </p>
+      <p class="update-date">1 сентября 2025</p>
+      <p class="update-description">Проголосуйте за Amanda на платформе Product Radar и помогите нам получить звание Продукт недели!</p>
+      <a href="https://productradar.ru/" class="update-link">Проголосовать!</a>
+    </div>
+
+  </main>
+
+  <footer>
+    © 2025 Amanda by <a href="https://t.me/maxnklv">Max Nikolaev</a>
+  </footer>
+
+  <script>
+    function toggleDescription(el) {
+      const desc = el.querySelector('.update-description');
+      const arrow = el.querySelector('.arrow');
+      desc.classList.toggle('show');
+      arrow.classList.toggle('rotate');
+    }
+  </script>
+</body>
+</html>
