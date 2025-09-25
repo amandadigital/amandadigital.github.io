@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maxford — Unknown China</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', system-ui, sans-serif;
+      background: #fff;
+      color: #111;
+    }
+    header, main, footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .brand {
+      font-size: 22px;
+      font-weight: bold;
+      color: #00bfff;
+    }
+    nav button {
+      margin-left: 12px;
+      padding: 8px 16px;
+      border: 1px solid #00bfff;
+      background: #fff;
+      color: #00bfff;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    nav button:hover {
+      background: #00bfff;
+      color: #fff;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      padding: 60px 20px;
+    }
+    .hero h2 {
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+    .hero .buttons a, .hero .buttons button {
+      display: inline-block;
+      margin-right: 12px;
+      padding: 12px 20px;
+      border-radius: 10px;
+      border: 1px solid #00bfff;
+      cursor: pointer;
+      font-size: 15px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .hero .primary {
+      background: #00bfff;
+      color: #fff;
+    }
+    .hero .primary:hover {
+      background: #009cd1;
+    }
+    .hero .secondary {
+      background: #fff;
+      color: #00bfff;
+    }
+    .hero .secondary:hover {
+      background: #e6f9ff;
+    }
+    .courses {
+      padding: 40px 20px;
+    }
+    .courses h3 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .course-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .course {
+      border: 1px solid #eee;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .course h4 {
+      margin: 0 0 10px;
+    }
+    .course span {
+      display: inline-block;
+      font-size: 12px;
+      background: #e0f7ff;
+      color: #00bfff;
+      padding: 2px 6px;
+      border-radius: 6px;
+      margin-left: 8px;
+    }
+    .course a {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 10px 16px;
+      border: 1px solid #00bfff;
+      border-radius: 10px;
+      background: #00bfff;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .course a:hover {
+      background: #009cd1;
+    }
+    footer {
+      margin-top: 40px;
+      border-top: 1px solid #eee;
+      padding-top: 20px;
+      font-size: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .lang-switch button {
+      margin-left: 8px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background: #fff;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .lang-switch img {
+      width: 18px;
+      height: 12px;
+      object-fit: cover;
+    }
+    .lang-switch button:hover {
+      background: #00bfff;
+      color: #fff;
+      border-color: #00bfff;
+    }
+    .modal-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+    .modal {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+    }
+    .modal h3 {
+      margin-top: 0;
+    }
+    .close {
+      float: right;
+      cursor: pointer;
+      font-weight: bold;
+      color: #555;
+    }
+    /* mobile */
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .hero .buttons a, .hero .buttons button {
+        margin-bottom: 10px;
+      }
+      header {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+      .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    padding: 60px 20px;
+    min-height: 60vh;
+    color: #fff;
+    background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+                url('https://images.unsplash.com/photo-1694278658706-5b71cde4dd2f?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.1.0') no-repeat center center;
+    background-size: cover;
+    border-radius: 12px;
+    margin-bottom: 40px;
+  }
+  .hero h2 {
+    font-size: 36px;
+    margin-bottom: 16px;
+  }
+
+    .hero p {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+  
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">Maxford — Unknown China</div>
+    <nav>
+      <button onclick="openModal('about')">About</button>
+      <button onclick="openModal('plus')">Maxford Plus</button>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h2 data-lang="hero-title">Курсы о Китае — культура, технологии, экономика</h2>
+      <p data-lang="hero-sub">Короткие понятные курсы, чтобы разобраться в современном Китае.</p>
+      <div class="buttons">
+        <a href="#courses" class="primary" data-lang="view-courses">Посмотреть курсы</a>
+        <button class="secondary" onclick="openModal('about')" data-lang="more">Подробнее</button>
+      </div>
+    </div>
+    
+  </section>
+
+  <section id="courses" class="courses">
+    <h3 data-lang="courses-title">Доступные курсы</h3>
+    <div class="course-list">
+      <div class="course">
+        <h4 data-lang="course1">Культура Китая <span>Культура</span></h4>
+        <p data-lang="course1-desc">Традиции, искусство, основы языка и история.</p>
+        <a href="#culture" data-lang="go">Перейти</a>
+      </div>
+      <div class="course">
+        <h4 data-lang="course2">Технологии Китая <span>Технологии</span></h4>
+        <p data-lang="course2-desc">От гаджетов до AI и больших платформ.</p>
+        <a href="#tech" data-lang="go">Перейти</a>
+      </div>
+      <div class="course">
+        <h4 data-lang="course3">Экономика Китая <span>Экономика</span></h4>
+        <p data-lang="course3-desc">Торговля, политика, рынки и мегакорпорации.</p>
+        <a href="#economy" data-lang="go">Перейти</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>© 2025 Maxford — Unknown China</div>
+    <div class="lang-switch">
+      Lang:
+      <button onclick="switchLang('zh')"><img src="https://flagcdn.com/cn.svg"> 中文</button>
+      <button onclick="switchLang('en')"><img src="https://flagcdn.com/gb.svg"> EN</button>
+      <button onclick="switchLang('ru')"><img src="https://flagcdn.com/ru.svg"> RU</button>
+    </div>
+  </footer>
+
+  <!-- Modals -->
+  <div id="modal-about" class="modal-bg">
+    <div class="modal">
+      <span class="close" onclick="closeModal('about')">✕</span>
+      <h3 data-lang="about-title">О нас</h3>
+      <p data-lang="about-text">Maxford — мини-академия с фокусом на короткие курсы о Китае: культура, технологии и экономика.</p>
+    </div>
+  </div>
+
+  <div id="modal-plus" class="modal-bg">
+    <div class="modal">
+      <span class="close" onclick="closeModal('plus')">✕</span>
+      <h3>Maxford Plus</h3>
+      <p data-lang="plus-text">Maxford Plus. Закрытый телеграм-канал с видео-объяснениями и раскрытой теорией.</p>
+      <a href="https://t.me/maxford_plus" target="_blank">Telegram</a>
+    </div>
+  </div>
+
+  <script>
+    function openModal(id) {
+      document.getElementById('modal-' + id).style.display = 'flex';
+    }
+    function closeModal(id) {
+      document.getElementById('modal-' + id).style.display = 'none';
+    }
+
+    const texts = {
+      ru: {
+        "hero-title": "Курсы о Китае — культура, технологии, экономика",
+        "hero-sub": "Короткие понятные курсы, чтобы разобраться в современном Китае.",
+        "view-courses": "Посмотреть курсы",
+        "more": "Подробнее",
+        "courses-title": "Доступные курсы",
+        "course1": "Культура Китая",
+        "course1-desc": "Традиции, искусство, основы языка и история.",
+        "course2": "Технологии Китая",
+        "course2-desc": "От гаджетов до AI и больших платформ.",
+        "course3": "Экономика Китая",
+        "course3-desc": "Торговля, политика, рынки и мегакорпорации.",
+        "go": "Перейти",
+        "about-title": "О нас",
+        "about-text": "Maxford — мини-академия с фокусом на короткие курсы о Китае: культура, технологии и экономика.",
+        "plus-text": "Maxford Plus. Закрытый телеграм-канал с видео-объяснениями и раскрытой теорией."
+      },
+      en: {
+        "hero-title": "China Courses — Culture, Tech, Economy",
+        "hero-sub": "Short, clear courses to understand modern China.",
+        "view-courses": "View Courses",
+        "more": "Learn More",
+        "courses-title": "Available Courses",
+        "course1": "Chinese Culture",
+        "course1-desc": "Traditions, art, basics of language and history.",
+        "course2": "Chinese Technology",
+        "course2-desc": "From gadgets to AI and big platforms.",
+        "course3": "Chinese Economy",
+        "course3-desc": "Trade, politics, markets and megacorporations.",
+        "go": "Go",
+        "about-title": "About Us",
+        "about-text": "Maxford — a mini-academy focused on short courses about China: culture, technology, and economy.",
+        "plus-text": "Maxford Plus. A private Telegram channel with video explanations and in-depth theory."
+      },
+      zh: {
+        "hero-title": "中国课程 —— 文化、科技、经济",
+        "hero-sub": "简短易懂的课程，帮助你了解现代中国。",
+        "view-courses": "查看课程",
+        "more": "了解更多",
+        "courses-title": "可选课程",
+        "course1": "中国文化",
+        "course1-desc": "传统、艺术、语言基础和历史。",
+        "course2": "中国科技",
+        "course2-desc": "从电子产品到人工智能和大平台。",
+        "course3": "中国经济",
+        "course3-desc": "贸易、政治、市场和大公司。",
+        "go": "进入",
+        "about-title": "关于我们",
+        "about-text": "Maxford —— 一个专注于中国相关短期课程的小型学院：文化、科技和经济。",
+        "plus-text": "Maxford Plus. 一个包含视频讲解和深入理论的私密Telegram频道。"
+      }
+    };
+
+    function switchLang(lang) {
+      document.querySelectorAll("[data-lang]").forEach(el => {
+        let key = el.getAttribute("data-lang");
+        if (texts[lang][key]) {
+          el.textContent = texts[lang][key];
+        }
+      });
+    }
+  </script>
+</body>
+</html>
