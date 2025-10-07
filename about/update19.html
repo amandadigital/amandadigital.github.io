@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amanda v1.9 — Updates</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #4F46E5;
+      --bg-color: #0a0a0a;
+      --text-color: white;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    a { text-decoration: none; color: var(--primary-color); }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: rgba(0,0,0,0.8);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header img { height: 40px; }
+
+    nav {
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .nav-links { display: flex; align-items: center; gap: 1rem; }
+    .burger { display: none; font-size: 1.5rem; cursor: pointer; }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background-color: rgba(0,0,0,0.95);
+        padding: 1rem 2rem;
+        border-radius: 5px;
+      }
+      .nav-links.show { display: flex; }
+      .burger { display: block; }
+    }
+
+    .lang-switch {
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 0.2rem 0.5rem;
+      border: 1px solid var(--primary-color);
+      border-radius: 4px;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 50vh;
+     
+      color: white;
+      padding: 0 1rem;
+    }
+
+    .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; color: white; }
+    .hero p { font-size: 1.2rem; max-width: 600px; }
+
+    .content {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .content h2 { margin-top: 2rem; color: var(--primary-color); }
+    .content p { margin-bottom: 1rem; }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background-color: rgba(0,0,0,0.8);
+      margin-top: 4rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://maxkranz.me/a_white.png" alt="Amanda Logo">
+    <nav>
+      <div class="burger" onclick="toggleMenu()">☰</div>
+      <div class="nav-links">
+        <a href="https://amnd.live/">Search</a>
+        <span class="lang-switch" onclick="switchLang('en')">EN</span>
+        <span class="lang-switch" onclick="switchLang('sr')">SR</span>
+        <span class="lang-switch" onclick="switchLang('ru')">RU</span>
+      </div>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1 data-en="Amanda v1.9 Updates" data-sr="Amanda v1.9 Ažuriranja" data-ru="Обновления Amanda v1.9">Amanda v1.9 Updates</h1>
+    <p data-en="Discover the latest features, improvements, and bug fixes in Amanda v1.9."
+       data-sr="Otkrijte najnovije funkcije, poboljšanja i ispravke grešaka u Amanda v1.9."
+       data-ru="Узнайте о новых функциях, улучшениях и исправлениях ошибок в Amanda v1.9.">
+       Discover the latest features, improvements, and bug fixes in Amanda v1.9.
+    </p>
+  </section>
+
+ <div class="content">
+  <h2 data-en="Update 1.9 is here!" data-sr="Ažuriranje 1.9 je stiglo!" data-ru="Обновление 1.9 уже тут!">Update 1.9 is here!</h2>
+
+  <h3 data-en="New Features" data-sr="Nove funkcije" data-ru="Новые функции">New Features</h3>
+  <p data-en="• Serbian language is now supported."
+     data-sr="• Srpski jezik je sada podržan."
+     data-ru="• Добавлен сербский язык">
+     • Serbian language is now supported.
+  </p>
+
+  <h3 data-en="Improvements" data-sr="Poboljšanja" data-ru="Улучшения">Improvements</h3>
+  <p data-en="• Improved filtering: bad words list updated, root word blocking added."
+     data-sr="• Poboljšana filtracija: lista loših reči je ažurirana, dodata blokada korenskih reči."
+     data-ru="• Улучшена фильтрация (пополнен список плохих слов, блокировка слов по корню)">
+     • Improved filtering: bad words list updated, root word blocking added.
+  </p>
+
+  <h3 data-en="Search History" data-sr="Istorija pretrage" data-ru="Поиск по истории и сохранённым сайтам">Search History</h3>
+  <p data-en="• You can now search through your search history and saved websites."
+     data-sr="• Sada možete pretraživati kroz istoriju pretrage i sačuvane sajtove."
+     data-ru="• Поиск по истории поиска и сохраненным сайтам">
+     • You can now search through your search history and saved websites.
+  </p>
+</div>
+
+
+  <footer>
+    By Max Nikolaev
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.querySelector('.nav-links').classList.toggle('show');
+    }
+    function switchLang(lang) {
+      document.querySelectorAll('[data-en]').forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+    }
+  </script>
+</body>
+</html>
