@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuty - Продукты, которые тебе нужны</title>
+    <style>
+        /* Сброс стилей и базовые настройки */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Шрифт похожий на Apple San Francisco */
+        @font-face {
+            font-family: 'SF Pro Display';
+            src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff2');
+        }
+        
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #1d1d1f;
+            background-color: #fff;
+            overflow-x: hidden;
+        }
+        
+        /* Основные цвета */
+        :root {
+            --primary-yellow: #FFD43B;
+            --light-yellow: #FFE566;
+            --dark-yellow: #E6B400;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F7;
+            --dark-gray: #86868B;
+            --black: #1d1d1f;
+        }
+        
+        /* Контейнер */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Размытие для фокуса внимания */
+        .blur-effect {
+            filter: blur(5px);
+            transition: filter 0.5s ease;
+        }
+        
+        .blur-effect:hover {
+            filter: blur(0);
+        }
+        
+        /* Шапка */
+        header {
+            background-color: var(--white);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo {
+            height: 40px;
+            width: auto;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--black);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--dark-yellow);
+        }
+        
+        /* Бургер меню */
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        
+        .burger-menu span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--black);
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+        
+        .mobile-nav {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: var(--white);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            z-index: 99;
+        }
+        
+        .mobile-nav.active {
+            display: block;
+        }
+        
+        .mobile-nav ul {
+            list-style: none;
+            padding: 20px;
+        }
+        
+        .mobile-nav ul li {
+            margin-bottom: 15px;
+        }
+        
+        .mobile-nav ul li a {
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 500;
+            display: block;
+            padding: 10px 0;
+        }
+        
+        /* Герой-секция - первичная оптическая область по Гуттенбергу */
+        .hero {
+            background: linear-gradient(rgba(255, 212, 59, 0.9), rgba(255, 212, 59, 0.9)), url('https://images.unsplash.com/photo-1635954350983-1911a5302997?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHNwYWNlJTIwZm9yJTIwd29yayUyMHllbGxvd3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=500');
+            background-size: cover;
+            background-position: center;
+            padding: 120px 0 100px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero h1 {
+            font-size: 52px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero p {
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: var(--black);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--black);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+        }
+        
+        /* Секции */
+        section {
+            padding: 100px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 40px;
+            margin-bottom: 60px;
+            font-weight: 600;
+        }
+        
+        /* О нас */
+        .about {
+            background-color: var(--white);
+        }
+        
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+        
+        .about-text {
+            flex: 1;
+        }
+        
+        .about-text h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .about-text p {
+            margin-bottom: 20px;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+        
+        .about-image {
+            flex: 1;
+            background-color: var(--primary-yellow);
+            height: 400px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+        }
+        
+        /* Наши продукты - терминальная область по Гуттенбергу */
+        .products {
+            background-color: var(--light-gray);
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .product-card {
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            text-align: center;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .product-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: var(--primary-yellow);
+        }
+        
+        .product-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+        
+        .product-card p {
+            margin-bottom: 20px;
+            color: var(--dark-gray);
+        }
+        
+        /* Команда */
+        .team {
+            background-color: var(--white);
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .team-member {
+            text-align: center;
+            padding: 30px;
+            background-color: var(--light-gray);
+            border-radius: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
+        
+        .member-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            object-fit: cover;
+            border: 3px solid var(--primary-yellow);
+        }
+        
+        .team-member h3 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .team-member p {
+            color: var(--dark-gray);
+            margin-bottom: 10px;
+        }
+        
+        .member-role {
+            font-weight: 600;
+            color: var(--dark-yellow) !important;
+        }
+        
+        .member-contact {
+            margin-top: 15px;
+        }
+        
+        .member-contact a {
+            color: var(--dark-yellow);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .member-contact a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Подвал */
+        footer {
+            background-color: var(--black);
+            color: var(--white);
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        
+        .footer-logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-logo {
+            height: 30px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+        
+        .footer-logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--white);
+        }
+        
+        .footer-links h4 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links ul li a {
+            color: var(--dark-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links ul li a:hover {
+            color: var(--primary-yellow);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            color: var(--dark-gray);
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: row;
+            }
+            
+            nav {
+                display: none;
+            }
+            
+            .burger-menu {
+                display: flex;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-container">
+                    <img src="https://maxkranz.me/chuty.png" alt="Chuty" class="logo">
+                    <div class="logo-text">Chuty</div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#about">О нас</a></li>
+                        <li><a href="#products">Продукты</a></li>
+                        <li><a href="#team">Команда</a></li>
+                    </ul>
+                </nav>
+                <div class="burger-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div class="mobile-nav">
+            <ul>
+                <li><a href="#about">О нас</a></li>
+                <li><a href="#products">Продукты</a></li>
+                <li><a href="#team">Команда</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Герой-секция - первичная оптическая область -->
+    <section class="hero">
+        <div class="container">
+            <h1>Продукты, которые тебе нужны</h1>
+            <p>Разрабатываем продукты для повседневного использования</p>
+            <a href="#products" class="btn">Наши продукты</a>
+        </div>
+    </section>
+
+    <!-- О нас -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">О нас</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Chuty - это больше чем компания</h3>
+                    <p>Мы создаем продукты, которые действительно нужны людям в повседневной жизни. Наша философия проста - делать удобные, функциональные и красивые приложения, которые решают реальные проблемы.</p>
+                    <p>Каждый наш продукт - это результат тщательного анализа потребностей пользователей и кропотливой работы над деталями. Мы верим, что технологии должны делать жизнь проще и приятнее.</p>
+                    <p>От управления задачами до развлекательных приложений - мы охватываем разные аспекты цифровой жизни, чтобы предоставить нашим пользователям комплексное решение для их повседневных нужд.</p>
+                </div>
+                <div class="about-image">
+                    💡
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Наши продукты - сильная область падения внимания -->
+    <section id="products" class="products">
+        <div class="container">
+            <h2 class="section-title">Наши продукты</h2>
+            <div class="products-grid">
+                <div class="product-card blur-effect">
+                    <div class="product-icon">📝</div>
+                    <h3>Chuty Tasks</h3>
+                    <p>Удобная платформа для управления задачами</p>
+                    <a href="https://amnd.live/chuty/tasks" class="btn">Перейти</a>
+                </div>
+               
+                <div class="product-card blur-effect">
+                    <div class="product-icon">📓</div>
+                    <h3>Chuty Notes</h3>
+                    <p>Место, куда можно записать свои мысли</p>
+                    <a href="https://amnd.live/chuty/notes" class="btn">Перейти</a>
+                </div>
+               <div class="product-card blur-effect">
+                    <div class="product-icon">🔍</div>
+                    <h3>Amanda</h3>
+                    <p>Детский поисковик с квестами и фильтрацией</p>
+                    <a href="https://amnd.live/" class="btn">Перейти</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Команда -->
+    <section id="team" class="team">
+        <div class="container">
+            <h2 class="section-title">Основатели Chuty</h2>
+            <div class="team-grid">
+                <div class="team-member blur-effect">
+                    <img src="https://cdn4.telesco.pe/file/aP39P3WtzyDN3nJYK9EhfAPkrIm1WPH1UoXFKGzYyQznlOXiLlwBMvCy0qYymAvloegHeNYYNlKPZS0KCSkrIfub1LWLZOKO0DiVdPciaArNOPfRJO_IPykcj3ptYicbnlpnyzqNeqqpyWkyUt-19A9z1VMmdyQzy15NQtURBpX_tt8lkXIc2887HMtDxL0_6qtuHE786KJm6_yTwiMQwZXPazLh615FJEPw7P9p-WfeyCQWrFKr4FobzSC4HjCi8yBpr7MKytwDL17vRBtt1ma2ed0-c5MFccbnsEcQ32Dt_1_BzfXiZmMfYZiTpcC2ChCZ92fXWeudI99gLkqOxA.jpg" alt="Максим Николаев" class="member-avatar">
+                    <h3>Максим Николаев</h3>
+                    <p class="member-role">CEO & Со-основатель</p>
+                    <div class="member-contact">
+                        <a href="https://t.me/maxnklv" target="_blank">@maxnklv</a>
+                    </div>
+                </div>
+                <div class="team-member blur-effect">
+                    <img src="https://cdn4.telesco.pe/file/Qpf3Pua5f_QDWWo5P5ftIbRGeXZFoKQ6CRDLwjdQKuh6Ap_fmOR9g98x-6oWH23tTnPrLHhOk2iTVtJIlpnMV9LCYlx4I_Qt16mCDLhv1AUNsVILKicx9z_dw1Cr-rO9Bwm_DYQbzBmjsTXQMLLnm1SR68jLAbkvWyyPw0CjydEO_PXM5s8oyG8dW3WDmumRIag6DT2TjVoF7d4PafLGjt9L9rU2ru59XBzHTGWuscmK5yql3s8YsYrcb3jucfMvt557WejZVD3PqNK1kjMgqxv3zUVWTWz5LlyB88lW-VuuPuYe5jS1WHw2-13VdgGG9O4z8k2iJbXBOnok3MUTzg.jpg" alt="Максим Волков" class="member-avatar">
+                    <h3>Максим Волков</h3>
+                    <p class="member-role">CPO & Со-основатель</p>
+                    <div class="member-contact">
+                        <a href="https://t.me/framecore_dev" target="_blank">@framecore_dev</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Подвал -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo-container">
+                        <img src="https://maxkranz.me/chuty.png" alt="Chuty" class="footer-logo">
+                        <div class="footer-logo-text">Chuty</div>
+                    </div>
+                    <p>Продукты, которые тебе нужны</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Продукты</h4>
+                    <ul>
+                        <li><a href="https://amnd.live/chuty/tasks">Chuty Tasks</a></li>
+                        <li><a href="https://amnd.live/chuty/notes">Chuty Notes</a></li>
+                      <li><a href="https://amnd.live">Amanda</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Команда</h4>
+                    <ul>
+                        <li><a href="#team">Основатели</a></li>
+                        <li><a href="https://t.me/maxnklv" target="_blank">Максим Николаев</a></li>
+                        <li><a href="https://t.me/framecore_dev" target="_blank">Максим Волков</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Chuty. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Эффект размытия при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Убираем размытие с элементов через 0.5 секунды
+            setTimeout(function() {
+                const blurElements = document.querySelectorAll('.blur-effect');
+                blurElements.forEach(function(element) {
+                    element.style.filter = 'blur(0)';
+                });
+            }, 500);
+            
+            // Добавляем плавную прокрутку для якорных ссылок
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                    
+                    // Закрываем мобильное меню после клика
+                    mobileNav.classList.remove('active');
+                });
+            });
+            
+            // Бургер меню
+            const burgerMenu = document.querySelector('.burger-menu');
+            const mobileNav = document.querySelector('.mobile-nav');
+            
+            burgerMenu.addEventListener('click', function() {
+                mobileNav.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>
