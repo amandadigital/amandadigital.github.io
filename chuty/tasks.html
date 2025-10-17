@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript" >
+        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+     
+        ym(98959916, "init", {
+             clickmap:true,
+             trackLinks:true,
+             accurateTrackBounce:true,
+             webvisor:true
+        });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/98959916" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задачи</title>
+    <link rel="shortcut icon" href="html.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-yellow: #FFD700;
+            --light-yellow: #FFF9C4;
+            --dark-yellow: #FBC02D;
+            --text-dark: #1D1D1F;
+            --text-light: #86868B;
+            --border-light: #D2D2D7;
+            --background: #F5F5F7;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text-dark);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+            padding: 20px;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 14px;
+        }
+        
+        .logo-text {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text-dark);
+            letter-spacing: -0.5px;
+        }
+
+        .todo-container {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 520px;
+            margin-bottom: 40px;
+        }
+
+        .todo-header {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            min-width: 200px;
+            padding: 16px 20px;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 17px;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: var(--card-bg);
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary-yellow);
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.2);
+        }
+
+        .add-button {
+            background-color: var(--primary-yellow);
+            color: var(--text-dark);
+            border: none;
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            min-width: 120px;
+        }
+
+        .add-button:hover {
+            background-color: var(--dark-yellow);
+            transform: translateY(-1px);
+        }
+
+        .add-button:active {
+            transform: translateY(0);
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            background-color: var(--card-bg);
+            padding: 18px 20px;
+            margin-bottom: 12px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        li:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        li.completed {
+            background-color: var(--light-yellow);
+            color: var(--text-light);
+            text-decoration: line-through;
+        }
+
+        li span {
+            cursor: pointer;
+            transition: color 0.3s ease;
+            flex: 1;
+            font-size: 17px;
+            font-weight: 500;
+        }
+
+        li span:hover {
+            color: var(--dark-yellow);
+        }
+
+        li .task-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        li button {
+            background-color: transparent;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            transition: all 0.2s ease;
+        }
+
+        li .delete-btn {
+            color: #FF3B30;
+        }
+
+        li .delete-btn:hover {
+            background-color: rgba(255, 59, 48, 0.1);
+        }
+
+        li .check-btn {
+            color: #34C759;
+        }
+
+        li .check-btn:hover {
+            background-color: rgba(52, 199, 89, 0.1);
+        }
+
+        .completed-folder {
+            background: linear-gradient(135deg, var(--light-yellow), var(--primary-yellow));
+            padding: 18px 20px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            margin-top: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            border: none;
+            color: var(--text-dark);
+            font-size: 17px;
+        }
+
+        .completed-folder:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .completed-tasks {
+            display: none;
+            margin-top: 15px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .completed-task {
+            background-color: var(--light-yellow);
+            padding: 18px 20px;
+            margin-bottom: 12px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .completed-task:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            color: var(--text-light);
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .footer {
+            margin-top: auto;
+            padding: 20px 0;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .footer a {
+            color: var(--primary-yellow);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: var(--dark-yellow);
+            text-decoration: underline;
+        }
+
+        /* Мобильная адаптация */
+        @media (max-width: 600px) {
+            .logo-text {
+                font-size: 28px;
+            }
+            
+            .logo-icon {
+                width: 50px;
+                height: 50px;
+            }
+
+            .todo-container {
+                width: 100%;
+                padding: 20px;
+                margin-bottom: 30px;
+            }
+
+            .todo-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            input[type="text"] {
+                min-width: 100%;
+                padding: 14px 16px;
+                font-size: 16px;
+            }
+
+            .add-button {
+                width: 100%;
+                padding: 14px 16px;
+                font-size: 16px;
+                min-width: auto;
+            }
+
+            li {
+                padding: 16px;
+                font-size: 16px;
+            }
+
+            li button {
+                font-size: 16px;
+                width: 36px;
+                height: 36px;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 8px;
+                align-items: center;
+            }
+
+            .footer {
+                padding: 15px 0;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .logo {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .logo-text {
+                font-size: 24px;
+            }
+            
+            .todo-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <div class="logo-icon">
+            <img src="https://maxkranz.me/chuty.png" alt="Chuty Tasks Logo" onerror="this.style.display='none'">
+        </div>
+        <div class="logo-text">Задачи</div>
+    </div>
+
+    <div class="todo-container">
+        <div class="todo-header">
+            <input type="text" id="todoInput" placeholder="Добавить новую задачу...">
+            <button class="add-button" onclick="addTodo()">Добавить</button>
+        </div>
+        <ul id="todoList"></ul>
+
+        <div id="completedFolder" class="completed-folder" style="display: none;" onclick="toggleCompletedTasks()">
+            <span>Выполненные задачи</span>
+            <span>📂</span>
+        </div>
+        <ul id="completedTasks" class="completed-tasks"></ul>
+        
+        <div class="stats">
+            <div id="activeTasksCount">Активных задач: 0</div>
+            <div id="completedTasksCount">Выполненных задач: 0</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        &copy; 2025 <a href="https://amnd.live/chuty" target="_blank">Chuty</a>. Все права защищены.
+    </div>
+
+    <script>
+        let todos = [];
+        let completedTodos = [];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            todos = JSON.parse(localStorage.getItem('todos')) || [];
+            completedTodos = JSON.parse(localStorage.getItem('completedTodos')) || [];
+            renderTodos();
+            renderCompletedTodos();
+            updateStats();
+
+            document.getElementById('todoInput').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    addTodo();
+                }
+            });
+            
+            // Если логотип не загрузился, покажем заглушку
+            const logoImg = document.querySelector('.logo-icon img');
+            logoImg.addEventListener('error', function() {
+                const logoIcon = document.querySelector('.logo-icon');
+                logoIcon.innerHTML = '<div style="width:100%;height:100%;background:linear-gradient(135deg, #FFD700, #FBC02D);display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:20px;border-radius:14px;">З</div>';
+            });
+        });
+
+        function addTodo() {
+            const inputField = document.getElementById('todoInput');
+            const todoText = inputField.value.trim();
+            if (todoText === '') return;
+
+            const newTodo = { text: todoText, completed: false };
+            todos.push(newTodo);
+            saveAndRenderTodos();
+
+            inputField.value = '';
+            inputField.focus();
+        }
+
+        function toggleTodo(index) {
+            todos[index].completed = !todos[index].completed;
+            saveAndRenderTodos();
+        }
+
+        function deleteTodo(index) {
+            todos.splice(index, 1);
+            saveAndRenderTodos();
+        }
+
+        function completeTodo(index) {
+            const completedTask = todos.splice(index, 1)[0];
+            completedTask.completed = true;
+            completedTodos.push(completedTask);
+            saveAndRenderTodos();
+            saveAndRenderCompletedTodos();
+        }
+
+        function deleteCompletedTask(index) {
+            completedTodos.splice(index, 1);
+            saveAndRenderCompletedTodos();
+        }
+
+        function restoreCompletedTask(index) {
+            const restoredTask = completedTodos.splice(index, 1)[0];
+            restoredTask.completed = false;
+            todos.push(restoredTask);
+            saveAndRenderTodos();
+            saveAndRenderCompletedTodos();
+        }
+
+        function toggleCompletedTasks() {
+            const completedTasks = document.getElementById('completedTasks');
+            completedTasks.style.display = completedTasks.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function saveAndRenderTodos() {
+            localStorage.setItem('todos', JSON.stringify(todos));
+            renderTodos();
+            updateStats();
+        }
+
+        function saveAndRenderCompletedTodos() {
+            localStorage.setItem('completedTodos', JSON.stringify(completedTodos));
+            renderCompletedTodos();
+            updateStats();
+        }
+
+        function renderTodos() {
+            const todoList = document.getElementById('todoList');
+            todoList.innerHTML = '';
+
+            todos.forEach((todo, index) => {
+                const li = document.createElement('li');
+                li.className = todo.completed ? 'completed' : '';
+                li.innerHTML = `
+                    <span onclick="toggleTodo(${index})">${todo.text}</span>
+                    <div class="task-actions">
+                        <button class="check-btn" onclick="completeTodo(${index})" title="Выполнить">✔️</button>
+                        <button class="delete-btn" onclick="deleteTodo(${index})" title="Удалить">🗑️</button>
+                    </div>
+                `;
+                todoList.appendChild(li);
+            });
+        }
+
+        function renderCompletedTodos() {
+            const completedFolder = document.getElementById('completedFolder');
+            const completedTasks = document.getElementById('completedTasks');
+            completedTasks.innerHTML = '';
+
+            if (completedTodos.length > 0) {
+                completedFolder.style.display = 'flex';
+
+                completedTodos.forEach((todo, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'completed-task';
+                    li.innerHTML = `
+                        <span>${todo.text}</span>
+                        <div class="task-actions">
+                            <button class="delete-btn" onclick="deleteCompletedTask(${index})" title="Удалить">🗑️</button>
+                            <button class="check-btn" onclick="restoreCompletedTask(${index})" title="Вернуть">↩️</button>
+                        </div>
+                    `;
+                    completedTasks.appendChild(li);
+                });
+            } else {
+                completedFolder.style.display = 'none';
+            }
+        }
+        
+        function updateStats() {
+            document.getElementById('activeTasksCount').textContent = `Активных задач: ${todos.length}`;
+            document.getElementById('completedTasksCount').textContent = `Выполненных задач: ${completedTodos.length}`;
+        }
+
+        window.onload = () => {
+            const savedData = localStorage.getItem('sync_data');
+            if (savedData) {
+                const syncData = JSON.parse(savedData);
+                console.log(`Синхронизированные данные: ${syncData.username}, ${syncData.data}`);
+            }
+        }
+    </script>
+</body>
+</html>
