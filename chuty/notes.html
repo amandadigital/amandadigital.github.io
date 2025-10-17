@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заметки</title>
+    <style>
+        :root {
+            --primary-yellow: #FFD700;
+            --light-yellow: #FFF9C4;
+            --dark-yellow: #FFC107;
+            --text-dark: #333333;
+            --text-light: #FFFFFF;
+            --border-light: #E0E0E0;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+      a{
+        color: #FFD700;
+      }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: white;
+            color: var(--text-dark);
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex: 1;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 40px;
+            height: 40px;
+            background-image: url('https://maxkranz.me/chuty.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .search-bar {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-light);
+            background-color: #f9f9f9;
+            font-size: 16px;
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+      
+        
+        .search-bar:focus {
+            outline: none;
+            border-color: var(--primary-yellow);
+            background-color: white;
+        }
+        
+        .note-editor, .note-view {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 10px var(--shadow);
+            display: none;
+            border: 1px solid var(--border-light);
+        }
+        
+        .note-editor.active, .note-view.active {
+            display: block;
+        }
+        
+        .note-editor input, .note-editor div[contenteditable="true"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            background-color: #f9f9f9;
+        }
+        
+        .note-editor div[contenteditable="true"] {
+            min-height: 150px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .note-editor input:focus, .note-editor div[contenteditable="true"]:focus {
+            outline: none;
+            border-color: var(--primary-yellow);
+            background-color: white;
+        }
+        
+        .note-view h2 {
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        
+        .note-view p {
+            white-space: pre-wrap;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        
+        .note-list {
+            width: 100%;
+            list-style: none;
+        }
+        
+        .note-list li {
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid var(--border-light);
+        }
+        
+        .note-list li:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow);
+        }
+        
+        .note-list li .note-text {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 500;
+        }
+        
+        .menu {
+            position: relative;
+        }
+        
+        .menu-button {
+            background-color: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        
+        .menu-button:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .menu-options {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: white;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px var(--shadow);
+            display: none;
+            width: 150px;
+            z-index: 10;
+        }
+        
+        .menu-options button {
+            background-color: transparent;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        
+        .menu-options button:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-yellow);
+            color: var(--text-dark);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--dark-yellow);
+        }
+        
+        .btn-secondary {
+            background-color: #f0f0f0;
+            color: var(--text-dark);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .btn-danger {
+            background-color: #FF3B30;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #D70015;
+        }
+        
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .toolbar button {
+            padding: 8px 12px;
+            font-size: 14px;
+            border: none;
+            background-color: white;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 1px 3px var(--shadow);
+        }
+        
+        .toolbar button.active {
+            background-color: var(--primary-yellow);
+        }
+        
+        .toolbar button:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .toolbar input[type="color"] {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        .pinned-section, .notes-section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #888;
+        }
+        
+        .empty-state p {
+            margin-bottom: 20px;
+        }
+        
+        footer {
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 20px;
+            border-top: 1px solid var(--border-light);
+            color: #888;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .note-editor, .note-view {
+                padding: 15px;
+            }
+            
+            .toolbar {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            
+            .toolbar button {
+                flex: 1;
+                min-width: 60px;
+            }
+            
+            .logo-container {
+                gap: 10px;
+            }
+            
+            .logo {
+                width: 32px;
+                height: 32px;
+            }
+            
+            footer {
+                padding: 15px 0;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <div class="logo"></div>
+                <h1>Заметки</h1>
+            </div>
+            <button class="btn btn-primary" onclick="createNewNote()">Новая заметка</button>
+        </header>
+        
+        <input type="text" class="search-bar" id="searchInput" placeholder="Поиск заметок...">
+        
+        <!-- Редактор заметок -->
+        <div class="note-editor" id="noteEditor">
+            <div class="toolbar">
+                <button id="boldBtn" onclick="toggleFormat('bold')"><b>B</b></button>
+                <button id="italicBtn" onclick="toggleFormat('italic')"><i>I</i></button>
+                <button id="underlineBtn" onclick="toggleFormat('underline')"><u>U</u></button>
+                <button id="linkBtn" onclick="createLink()">🔗</button>
+                <input type="color" id="colorPicker" onchange="changeColor(this.value)">
+            </div>
+            <input type="text" id="noteTitleInput" placeholder="Заголовок...">
+            <div id="noteInput" contenteditable="true" placeholder="Текст заметки..."></div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-primary" onclick="saveNote()">Сохранить</button>
+                <button class="btn btn-secondary" onclick="cancelEdit()">Отмена</button>
+            </div>
+        </div>
+        
+        <!-- Просмотр заметки -->
+        <div class="note-view" id="noteView">
+            <h2 id="noteViewTitle">Заголовок</h2>
+            <p id="noteViewContent">Текст заметки будет отображен здесь...</p>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-primary" onclick="editNote()">Редактировать</button>
+                <button class="btn btn-secondary" onclick="cancelView()">Назад</button>
+            </div>
+        </div>
+        
+        <!-- Список заметок -->
+        <div class="pinned-section" id="pinnedSection">
+            <div class="section-title">Закрепленные</div>
+            <ul class="note-list" id="pinnedNoteList"></ul>
+        </div>
+        
+        <div class="notes-section" id="notesSection">
+            <div class="section-title">Все заметки</div>
+            <ul class="note-list" id="noteList"></ul>
+        </div>
+        
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <p>У вас пока нет заметок</p>
+            <button class="btn btn-primary" onclick="createNewNote()">Создать первую заметку</button>
+        </div>
+    </div>
+
+    <footer>
+        © 2025 <a href="https://amnd.live/chuty/">Chuty</a>
+    </footer>
+
+    <script>
+        let notes = [];
+        let currentNoteId = null;
+
+        const noteTitleInput = document.getElementById('noteTitleInput');
+        const noteInput = document.getElementById('noteInput');
+        const noteList = document.getElementById('noteList');
+        const pinnedNoteList = document.getElementById('pinnedNoteList');
+        const noteViewTitle = document.getElementById('noteViewTitle');
+        const noteViewContent = document.getElementById('noteViewContent');
+        const noteEditor = document.getElementById('noteEditor');
+        const noteView = document.getElementById('noteView');
+        const searchInput = document.getElementById('searchInput');
+        const emptyState = document.getElementById('emptyState');
+        const pinnedSection = document.getElementById('pinnedSection');
+        const notesSection = document.getElementById('notesSection');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const storedNotes = localStorage.getItem('notes');
+            if (storedNotes) notes = JSON.parse(storedNotes);
+            renderNotes();
+        });
+
+        searchInput.addEventListener('input', renderNotes);
+
+        function createNewNote() {
+            currentNoteId = null;
+            noteTitleInput.value = '';
+            noteInput.innerHTML = '';
+            noteEditor.classList.add('active');
+            noteView.classList.remove('active');
+            updateEmptyState();
+        }
+
+        function saveNote() {
+            const noteTitle = noteTitleInput.value.trim() || 'Без названия';
+            const noteText = noteInput.innerHTML.trim();
+            if (noteText === '') return;
+
+            if (currentNoteId === null) {
+                const newNote = {
+                    id: Date.now(),
+                    title: noteTitle,
+                    text: noteText,
+                    pinned: false,
+                };
+                notes.push(newNote);
+            } else {
+                const note = notes.find(note => note.id === currentNoteId);
+                note.title = noteTitle;
+                note.text = noteText;
+            }
+
+            saveNotesToLocalStorage();
+            noteEditor.classList.remove('active');
+            renderNotes();
+        }
+
+        function cancelEdit() {
+            noteEditor.classList.remove('active');
+            if (currentNoteId !== null) openNote(currentNoteId);
+            else renderNotes();
+        }
+
+        function cancelView() {
+            noteView.classList.remove('active');
+            renderNotes();
+        }
+
+        function deleteNote(id) {
+            notes = notes.filter(note => note.id !== id);
+            saveNotesToLocalStorage();
+            renderNotes();
+        }
+
+        function openNote(id) {
+            currentNoteId = id;
+            const note = notes.find(note => note.id === id);
+            noteViewTitle.innerText = note.title;
+            noteViewContent.innerHTML = note.text;
+            noteEditor.classList.remove('active');
+            noteView.classList.add('active');
+            updateEmptyState();
+        }
+
+        function editNote() {
+            const note = notes.find(note => note.id === currentNoteId);
+            noteTitleInput.value = note.title;
+            noteInput.innerHTML = note.text;
+            noteEditor.classList.add('active');
+            noteView.classList.remove('active');
+        }
+
+        function pinNote(id) {
+            const note = notes.find(note => note.id === id);
+            note.pinned = !note.pinned;
+            saveNotesToLocalStorage();
+            renderNotes();
+        }
+
+        function toggleNoteMenu(noteId) {
+            const menu = document.getElementById(`menu-${noteId}`);
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            document.body.addEventListener('click', closeMenus);
+        }
+
+        function closeMenus(event) {
+            if (!event.target.closest('.menu')) {
+                document.querySelectorAll('.menu-options').forEach(menu => menu.style.display = 'none');
+                document.body.removeEventListener('click', closeMenus);
+            }
+        }
+
+        function toggleFormat(command) {
+            document.execCommand(command, false, null);
+            toggleButtonState(command);
+        }
+
+        function toggleButtonState(command) {
+            const button = document.getElementById(`${command}Btn`);
+            button.classList.toggle('active');
+        }
+
+        function createLink() {
+            let url = prompt('Введите URL:');
+            if (url) {
+                if (!/^https?:\/\//i.test(url) && !/^www\./i.test(url)) {
+                    url = 'https://' + url;
+                }
+                document.execCommand('createLink', false, url);
+                document.querySelectorAll('a').forEach(link => {
+                    link.style.textDecoration = 'none';
+                    link.style.color = 'blue';
+                });
+                toggleButtonState('createLink');
+            }
+        }
+
+        function changeColor(color) {
+            document.execCommand('foreColor', false, color);
+        }
+
+        function renderNotes() {
+            const searchTerm = searchInput.value.toLowerCase();
+            noteList.innerHTML = '';
+            pinnedNoteList.innerHTML = '';
+
+            const pinnedNotes = notes.filter(note => note.pinned);
+            const otherNotes = notes.filter(note => !note.pinned);
+
+            // Отображаем закрепленные заметки
+            pinnedNotes
+                .filter(note => note.title.toLowerCase().includes(searchTerm) || note.text.toLowerCase().includes(searchTerm))
+                .forEach(note => {
+                    const li = createNoteListItem(note);
+                    pinnedNoteList.appendChild(li);
+                });
+
+            // Отображаем остальные заметки
+            otherNotes
+                .filter(note => note.title.toLowerCase().includes(searchTerm) || note.text.toLowerCase().includes(searchTerm))
+                .forEach(note => {
+                    const li = createNoteListItem(note);
+                    noteList.appendChild(li);
+                });
+
+            updateEmptyState();
+            updateSectionVisibility();
+        }
+
+        function createNoteListItem(note) {
+            const pinButtonText = note.pinned ? 'Открепить' : 'Закрепить';
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <div class="note-text" onclick="openNote(${note.id})">${note.title}</div>
+                <div class="menu">
+                    <button class="menu-button" onclick="toggleNoteMenu(${note.id})">⋮</button>
+                    <div class="menu-options" id="menu-${note.id}">
+                        <button onclick="openNote(${note.id})">👁️ Просмотреть</button>
+                        <button onclick="editNoteFromList(${note.id})">✏️ Редактировать</button>
+                        <button onclick="pinNote(${note.id})">📌 ${pinButtonText}</button>
+                        <button onclick="deleteNote(${note.id})" style="color: #FF3B30;">🗑️ Удалить</button>
+                    </div>
+                </div>
+            `;
+            return li;
+        }
+
+        function editNoteFromList(id) {
+            currentNoteId = id;
+            const note = notes.find(note => note.id === id);
+            noteTitleInput.value = note.title;
+            noteInput.innerHTML = note.text;
+            noteEditor.classList.add('active');
+            noteView.classList.remove('active');
+        }
+
+        function updateEmptyState() {
+            if (notes.length === 0) {
+                emptyState.style.display = 'block';
+                pinnedSection.style.display = 'none';
+                notesSection.style.display = 'none';
+            } else {
+                emptyState.style.display = 'none';
+                pinnedSection.style.display = 'block';
+                notesSection.style.display = 'block';
+            }
+        }
+
+        function updateSectionVisibility() {
+            const pinnedNotes = notes.filter(note => note.pinned);
+            const otherNotes = notes.filter(note => !note.pinned);
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            const hasPinnedResults = pinnedNotes.some(note => 
+                note.title.toLowerCase().includes(searchTerm) || 
+                note.text.toLowerCase().includes(searchTerm)
+            );
+            
+            const hasOtherResults = otherNotes.some(note => 
+                note.title.toLowerCase().includes(searchTerm) || 
+                note.text.toLowerCase().includes(searchTerm)
+            );
+            
+            pinnedSection.style.display = hasPinnedResults ? 'block' : 'none';
+            notesSection.style.display = hasOtherResults ? 'block' : 'none';
+        }
+
+        function saveNotesToLocalStorage() {
+            localStorage.setItem('notes', JSON.stringify(notes));
+        }
+
+        // Инициализация приложения
+        renderNotes();
+    </script>
+</body>
+</html>
