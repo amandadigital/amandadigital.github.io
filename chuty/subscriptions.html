@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подписки</title>
+  <link rel="shortcut icon" href="https://maxkranz.me/chuty.png">
+    <style>
+        :root {
+            --yellow: #FFD700;
+            --light-yellow: #FFF9C4;
+            --dark-yellow: #FFC107;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F7;
+            --gray: #86868B;
+            --dark-gray: #1D1D1F;
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: var(--white);
+            color: var(--dark-gray);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--white);
+            border-bottom: 1px solid var(--light-gray);
+            padding: 20px 0;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo img {
+            height: 36px;
+            width: auto;
+        }
+        
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+        
+        .add-btn {
+            background-color: var(--yellow);
+            color: var(--dark-gray);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .add-btn:hover {
+            background-color: var(--dark-yellow);
+        }
+        
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 40px 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .page-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .page-subtitle {
+            color: var(--gray);
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        
+        /* Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .subscription-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--light-gray);
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .subscription-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subscription-card.expiring {
+            border-left: 4px solid var(--yellow);
+        }
+        
+        .subscription-card.expiring::before {
+            content: "!";
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--yellow);
+            color: var(--dark-gray);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subscription-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .subscription-name {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .subscription-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gray);
+            font-size: 16px;
+            transition: color 0.2s ease;
+            padding: 4px;
+        }
+        
+        .action-btn:hover {
+            color: var(--dark-gray);
+        }
+        
+        .subscription-price {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark-gray);
+        }
+        
+        .subscription-date {
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .subscription-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background-color: var(--light-yellow);
+            color: var(--dark-gray);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+        
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .empty-state p {
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background-color: var(--white);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .modal-title {
+            font-size: 22px;
+            font-weight: 600;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+            transition: color 0.2s ease;
+        }
+        
+        .close-btn:hover {
+            color: var(--dark-gray);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-gray);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--light-gray);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.2s ease;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--light-gray);
+            border-radius: 10px;
+            font-size: 16px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+        }
+        
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--yellow);
+        }
+        
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 25px;
+        }
+        
+        .cancel-btn {
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .cancel-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .save-btn {
+            background-color: var(--yellow);
+            color: var(--dark-gray);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .save-btn:hover {
+            background-color: var(--dark-yellow);
+        }
+        
+        /* Footer */
+        footer {
+            padding: 30px 0;
+            text-align: center;
+            color: var(--gray);
+            font-size: 14px;
+            margin-top: auto;
+        }
+        
+        .footer-link {
+            color: var(--yellow);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-link:hover {
+            color: var(--dark-yellow);
+            text-decoration: underline;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .logo {
+                justify-content: center;
+            }
+            
+            .page-title {
+                font-size: 28px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="https://maxkranz.me/chuty.png" alt="Chuty Wallet Logo">
+                    <h1>Подписки</h1>
+                </div>
+                <button class="add-btn" id="addSubscriptionBtn">
+                    <span>+</span> Добавить подписку
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="container">
+            <h2 class="page-title">Мои подписки</h2>
+            <p class="page-subtitle">Управляйте своими подписками и следите за расходами</p>
+            
+            <div class="dashboard" id="subscriptionsContainer">
+                <!-- Подписки будут добавляться сюда -->
+            </div>
+            
+            <div class="empty-state" id="emptyState">
+                <h3>У вас пока нет подписок</h3>
+                <p>Добавьте свою первую подписку, чтобы начать отслеживать расходы</p>
+                <button class="add-btn" id="addSubscriptionEmptyBtn">
+                    <span>+</span> Создать первую подписку
+                </button>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Модальное окно добавления/редактирования подписки -->
+    <div class="modal-overlay" id="subscriptionModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Новая подписка</h2>
+                <button class="close-btn" id="closeModalBtn">&times;</button>
+            </div>
+            
+            <form id="subscriptionForm">
+                <input type="hidden" id="subscriptionId">
+                
+                <div class="form-group">
+                    <label for="subscriptionName" class="form-label">Название</label>
+                    <input type="text" id="subscriptionName" class="form-input" placeholder="Например, Netflix" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="subscriptionPrice" class="form-label">Цена</label>
+                        <input type="number" id="subscriptionPrice" class="form-input" placeholder="0.00" min="0" step="0.01" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subscriptionCurrency" class="form-label">Валюта</label>
+                        <select id="subscriptionCurrency" class="form-select" required>
+                            <option value="RUB">RUB - Российский рубль</option>
+                            <option value="USD">USD - Доллар США</option>
+                            <option value="EUR">EUR - Евро</option>
+                            <option value="GBP">GBP - Фунт стерлингов</option>
+                            <option value="JPY">JPY - Японская иена</option>
+                            <option value="CNY">CNY - Китайский юань</option>
+                            <option value="KZT">KZT - Казахстанский тенге</option>
+                            <option value="UAH">UAH - Украинская гривна</option>
+                            <option value="BYN">BYN - Белорусский рубль</option>
+                            <option value="CHF">CHF - Швейцарский франк</option>
+                            <option value="CAD">CAD - Канадский доллар</option>
+                            <option value="AUD">AUD - Австралийский доллар</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subscriptionDate" class="form-label">Дата оплаты</label>
+                    <input type="date" id="subscriptionDate" class="form-input" required>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" id="cancelBtn">Отмена</button>
+                    <button type="submit" class="save-btn" id="saveBtn">Добавить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© 2025 <a href="https://amnd.live/chuty" class="footer-link" target="_blank">Chuty</a>. Все права защищены.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Данные приложения
+        let subscriptions = JSON.parse(localStorage.getItem('chutySubscriptions')) || [];
+        let editingSubscriptionId = null;
+        
+        // Элементы DOM
+        const subscriptionsContainer = document.getElementById('subscriptionsContainer');
+        const emptyState = document.getElementById('emptyState');
+        const addSubscriptionBtn = document.getElementById('addSubscriptionBtn');
+        const addSubscriptionEmptyBtn = document.getElementById('addSubscriptionEmptyBtn');
+        const subscriptionModal = document.getElementById('subscriptionModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const subscriptionForm = document.getElementById('subscriptionForm');
+        const modalTitle = document.getElementById('modalTitle');
+        const saveBtn = document.getElementById('saveBtn');
+        const subscriptionIdInput = document.getElementById('subscriptionId');
+        const subscriptionNameInput = document.getElementById('subscriptionName');
+        const subscriptionPriceInput = document.getElementById('subscriptionPrice');
+        const subscriptionCurrencyInput = document.getElementById('subscriptionCurrency');
+        const subscriptionDateInput = document.getElementById('subscriptionDate');
+        
+        // Форматы валют
+        const currencyFormats = {
+            'RUB': 'ru-RU',
+            'USD': 'en-US',
+            'EUR': 'de-DE',
+            'GBP': 'en-GB',
+            'JPY': 'ja-JP',
+            'CNY': 'zh-CN',
+            'KZT': 'kk-KZ',
+            'UAH': 'uk-UA',
+            'BYN': 'be-BY',
+            'CHF': 'de-CH',
+            'CAD': 'en-CA',
+            'AUD': 'en-AU'
+        };
+        
+        // Функции
+        function renderSubscriptions() {
+            console.log('renderSubscriptions called, subscriptions:', subscriptions);
+            
+            if (subscriptions.length === 0) {
+                emptyState.style.display = 'flex';
+                subscriptionsContainer.style.display = 'none';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            subscriptionsContainer.style.display = 'grid';
+            
+            subscriptionsContainer.innerHTML = '';
+            
+            subscriptions.forEach(subscription => {
+                const isExpiring = isSubscriptionExpiring(subscription.date);
+                
+                const subscriptionCard = document.createElement('div');
+                subscriptionCard.className = `subscription-card ${isExpiring ? 'expiring' : ''}`;
+                subscriptionCard.innerHTML = `
+                    <div class="subscription-header">
+                        <h3 class="subscription-name">${subscription.name}</h3>
+                        <div class="subscription-actions">
+                            <button class="action-btn edit-btn" data-id="${subscription.id}">✏️</button>
+                            <button class="action-btn delete-btn" data-id="${subscription.id}">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="subscription-price">${formatPrice(subscription.price, subscription.currency)}</div>
+                    <div class="subscription-date">Дата оплаты: ${formatDate(subscription.date)}</div>
+                    <span class="subscription-status status-active">Активна</span>
+                `;
+                
+                subscriptionsContainer.appendChild(subscriptionCard);
+            });
+            
+            // Добавляем обработчики событий для кнопок редактирования и удаления
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    editSubscription(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    deleteSubscription(id);
+                });
+            });
+        }
+        
+        function formatPrice(price, currency) {
+            const locale = currencyFormats[currency] || 'ru-RU';
+            
+            try {
+                return new Intl.NumberFormat(locale, {
+                    style: 'currency',
+                    currency: currency,
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }).format(price);
+            } catch (error) {
+                // Fallback если форматирование не работает
+                return `${price} ${currency}`;
+            }
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ru-RU');
+        }
+        
+        function isSubscriptionExpiring(dateString) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const paymentDate = new Date(dateString);
+            paymentDate.setHours(0, 0, 0, 0);
+            
+            // Если дата оплаты сегодня или в прошлом, показываем предупреждение
+            return paymentDate <= today;
+        }
+        
+        function openModal() {
+            subscriptionModal.classList.add('active');
+        }
+        
+        function closeModal() {
+            subscriptionModal.classList.remove('active');
+            resetForm();
+        }
+        
+        function resetForm() {
+            subscriptionForm.reset();
+            subscriptionIdInput.value = '';
+            editingSubscriptionId = null;
+            modalTitle.textContent = 'Новая подписка';
+            saveBtn.textContent = 'Добавить';
+            subscriptionCurrencyInput.value = 'RUB';
+            
+            // Устанавливаем сегодняшнюю дату по умолчанию
+            const today = new Date().toISOString().split('T')[0];
+            subscriptionDateInput.value = today;
+        }
+        
+        function addSubscription(name, price, currency, date) {
+            const newSubscription = {
+                id: Date.now().toString(),
+                name,
+                price: parseFloat(price),
+                currency,
+                date
+            };
+            
+            subscriptions.push(newSubscription);
+            saveToLocalStorage();
+            renderSubscriptions();
+            closeModal();
+        }
+        
+        function editSubscription(id) {
+            const subscription = subscriptions.find(sub => sub.id === id);
+            if (!subscription) return;
+            
+            editingSubscriptionId = id;
+            subscriptionIdInput.value = id;
+            subscriptionNameInput.value = subscription.name;
+            subscriptionPriceInput.value = subscription.price;
+            subscriptionCurrencyInput.value = subscription.currency;
+            subscriptionDateInput.value = subscription.date;
+            
+            modalTitle.textContent = 'Редактировать подписку';
+            saveBtn.textContent = 'Сохранить';
+            
+            openModal();
+        }
+        
+        function updateSubscription(id, name, price, currency, date) {
+            const subscriptionIndex = subscriptions.findIndex(sub => sub.id === id);
+            if (subscriptionIndex === -1) return;
+            
+            subscriptions[subscriptionIndex] = {
+                id,
+                name,
+                price: parseFloat(price),
+                currency,
+                date
+            };
+            
+            saveToLocalStorage();
+            renderSubscriptions();
+            closeModal();
+        }
+        
+        function deleteSubscription(id) {
+            if (confirm('Вы уверены, что хотите удалить эту подписку?')) {
+                subscriptions = subscriptions.filter(sub => sub.id !== id);
+                saveToLocalStorage();
+                renderSubscriptions();
+            }
+        }
+        
+        function saveToLocalStorage() {
+            localStorage.setItem('chutySubscriptions', JSON.stringify(subscriptions));
+        }
+        
+        // Обработчики событий
+        addSubscriptionBtn.addEventListener('click', openModal);
+        addSubscriptionEmptyBtn.addEventListener('click', openModal);
+        
+        closeModalBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+        
+        subscriptionForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            console.log('Form submitted');
+            
+            const name = subscriptionNameInput.value.trim();
+            const price = subscriptionPriceInput.value;
+            const currency = subscriptionCurrencyInput.value;
+            const date = subscriptionDateInput.value;
+            
+            console.log('Form data:', { name, price, currency, date });
+            
+            if (!name || !price || !currency || !date) {
+                alert('Пожалуйста, заполните все поля');
+                return;
+            }
+            
+            if (editingSubscriptionId) {
+                console.log('Updating subscription:', editingSubscriptionId);
+                updateSubscription(editingSubscriptionId, name, price, currency, date);
+            } else {
+                console.log('Adding new subscription');
+                addSubscription(name, price, currency, date);
+            }
+        });
+        
+        // Закрытие модального окна при клике вне его
+        subscriptionModal.addEventListener('click', (e) => {
+            if (e.target === subscriptionModal) {
+                closeModal();
+            }
+        });
+        
+        // Инициализация приложения
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('App initialized');
+            renderSubscriptions();
+            
+            // Устанавливаем минимальную дату как сегодня
+            const today = new Date().toISOString().split('T')[0];
+            subscriptionDateInput.min = today;
+            
+            // Устанавливаем сегодняшнюю дату по умолчанию
+            subscriptionDateInput.value = today;
+        });
+    </script>
+</body>
+</html>
