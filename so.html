@@ -1,104 +1,31 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Встраивание StartOrigin — пример</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StartOrigin Fullscreen</title>
   <style>
-    :root{
-      --bg:#0f1724;
-      --card:#0b1220;
-      --accent:#10a37f;
-      --glass: rgba(255,255,255,0.04);
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden; /* чтобы не было скролла страницы вокруг iframe */
     }
-    body{font-family:Inter,-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-         margin:0;min-height:100vh;background:linear-gradient(180deg,#071428 0%, #081426 100%);color:#e6eef6;
-         display:flex;align-items:center;justify-content:center;padding:32px;}
-    .container{width:100%;max-width:1100px;}
-    .frame-card{background:var(--card);border-radius:14px;padding:14px;box-shadow:0 10px 40px rgba(2,6,23,0.7);}
-    .header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-    .logo{width:48px;height:48px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700}
-    .title{font-size:18px;margin:0}
-    /* Responsive iframe wrapper using aspect-ratio fallback */
-    .iframe-wrap{position:relative;border-radius:10px;overflow:hidden;background:var(--glass)}
-    .iframe-wrap::before{content:"";display:block;padding-top:56.25%} /* 16:9 */
-    .the-iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:white}
-    /* Loader */
-    .loader{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(2,6,23,0.55), rgba(2,6,23,0.5));backdrop-filter: blur(4px);transition:opacity .28s ease}
-    .loader.hidden{opacity:0;pointer-events:none}
-    .loader-text{padding:10px 16px;border-radius:10px;background:rgba(0,0,0,0.45);font-size:14px}
-    .fallback{padding:12px;font-size:14px;color:#c7d6e8}
-    @media (max-width:640px){
-      .container{padding:0 8px}
-      .title{font-size:16px}
-      .iframe-wrap::before{padding-top:75%} /* taller on mobile */
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="frame-card">
-      <div class="header">
-        <div class="logo">SO</div>
-        <div>
-          <h1 class="title">StartOrigin — встраиваемая страница</h1>
-          <div style="font-size:13px;color:#a9bfd6">Адаптивный iframe с индикатором загрузки</div>
-        </div>
-      </div>
-
-      <div class="iframe-wrap" id="iframeWrap">
-        <div class="loader" id="loader">
-          <div class="loader-text">Загрузка… Пожалуйста, подождите</div>
-        </div>
-
-        <iframe
-          id="soFrame"
-          class="the-iframe"
-          src="https://v0-start-origin-landing-page-design.vercel.app/"
-          title="StartOrigin — Landing"
-          loading="lazy"
-          sandbox="allow-scripts allow-forms allow-popups allow-same-origin"
-          referrerpolicy="no-referrer-when-downgrade"
-        ></iframe>
-      </div>
-
-      <div class="fallback" id="fallback" style="display:none;margin-top:12px">
-        Не удалось загрузить содержимое в iframe. <a href="https://v0-start-origin-landing-page-design.vercel.app/" target="_blank" rel="noopener noreferrer">Открыть StartOrigin в новой вкладке</a>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    (function(){
-      const iframe = document.getElementById('soFrame');
-      const loader = document.getElementById('loader');
-      const fallback = document.getElementById('fallback');
-
-      // Скрыть лоадер когда iframe полностью загрузился
-      iframe.addEventListener('load', () => {
-        // небольшая задержка для плавного исчезновения
-        setTimeout(()=> loader.classList.add('hidden'), 220);
-      });
-
-      // Обработка ошибки (не всегда срабатывает в кросс-оригинальных случаях)
-      iframe.addEventListener('error', () => {
-        loader.classList.add('hidden');
-        fallback.style.display = 'block';
-      });
-
-      // Опционально: если нужен динамический ресайз по высоте — можно добавить postMessage-согласованный механизм.
-      // Пример: host ожидает сообщения {type:'height', height: N} от встраиваемой страницы, тогда можно менять стиль.
-      window.addEventListener('message', e => {
-        // защита: проверь origin, если точно известно откуда приходят сообщения:
-        // if (e.origin !== 'https://v0-start-origin-landing-page-design.vercel.app') return;
-        try{
-          const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-          if (data && data.type === 'height' && Number.isFinite(data.height)) {
-            iframe.style.height = data.height + 'px';
-          }
-        } catch(err){}
-      });
-    })();
-  </script>
+  <iframe
+    src="https://v0-start-origin-landing-page-design.vercel.app/"
+    title="StartOrigin"
+    sandbox="allow-scripts allow-forms allow-popups allow-same-origin"
+    referrerpolicy="no-referrer-when-downgrade"
+  ></iframe>
 </body>
 </html>
